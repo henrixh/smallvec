@@ -1,25 +1,31 @@
 #define SMALLVEC_USE_INTRISTICS
-#ifdef SMALLVEC_H // Define this in exactly one C++ file.
+
+#ifndef SMALLVEC_H
+#define SMALLVEC_H
+
+#ifdef SMALLVEC_USE_INTRISTICS
+#include <immintrin.h>
+#include <smmintrin.h>
+#endif // SMALLVEC_USE_INTRISTICS
 
 #include <iostream>
 
 class vec3 {
 private:
 
-#ifdef SMALLVEC_USE_INTRINSTICS
+#ifdef SMALLVEC_USE_INTRISTICS
   __m128 d;
   inline vec3(const __m128 & n);
 #endif // SMALLVEC_USE_INTRISTICS
 
-#ifndef SMALLVEC_USE_INTRINSTICS
+#ifndef SMALLVEC_USE_INTRISTICS
   float d[4];
 #endif // SMALLVEC_USE_INTRISTICS
-
-
 
 public:
   inline vec3();
   inline vec3(const float v0, const float v1, const float v2);
+  inline vec3(float * const vs);
   float inline length() const;
   float inline x() const;
   float inline y() const;
@@ -66,6 +72,13 @@ inline vec3::vec3(float v0, float v1, float v2) {
   d[0] = v0;
   d[1] = v1;
   d[2] = v2;
+  d[3] = 0.0;
+}
+
+inline vec3::vec3(float const * const vs) {
+  d[0] = vs[0];
+  d[1] = vs[1];
+  d[2] = vs[2];
   d[3] = 0.0;
 }
 
@@ -192,20 +205,7 @@ float inline horizontal_max(const vec3 & a) {
 #endif // SMALLVEC_USE_INTRISTICS
 
 
-
-
-
-
-
-
-
-
-
-
-
 #ifdef SMALLVEC_USE_INTRISTICS
-#include <immintrin.h>
-#include <smmintrin.h>
 
 inline vec3::vec3() {
   d = _mm_set_ps(0,0,0,0);
@@ -218,6 +218,11 @@ inline vec3::vec3(const __m128 & n) {
 inline vec3::vec3(const float v0, const float v1, const float v2) {
   d = _mm_set_ps(v0, v1, v2, 0.0f);
 }
+
+inline vec3::vec3(float * const vs) {
+  d = _mm_set_ps(vs[0], vs[1], vs[2], 0.0f);
+}
+
 
 float inline vec3::x() const {
   return _mm_cvtss_f32(_mm_shuffle_ps(d, d, _MM_SHUFFLE(0, 0, 0, 3)));
