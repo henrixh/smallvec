@@ -97,10 +97,11 @@ float inline vec3::length() const {
 }
 
 void inline vec3::normalize() {
-  d[0] /= length();
-  d[1] /= length();
-  d[2] /= length();
-  d[3] /= length();
+  float scale = 1.0f/length();
+  d[0] *= scale;
+  d[1] *= scale;
+  d[2] *= scale;
+  d[3] *= scale;
 }
 
 void inline vec3::scale(const float s) {
