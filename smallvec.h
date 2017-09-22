@@ -75,7 +75,7 @@ inline vec3::vec3(float v0, float v1, float v2) {
   d[3] = 0.0;
 }
 
-inline vec3::vec3(float const * const vs) {
+inline vec3::vec3(float * const vs) {
   d[0] = vs[0];
   d[1] = vs[1];
   d[2] = vs[2];
