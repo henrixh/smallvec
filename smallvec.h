@@ -1,26 +1,24 @@
-#define SMALLVEC_USE_INTRISTICS
-
 #ifndef SMALLVEC_H
 #define SMALLVEC_H
 
-#ifdef SMALLVEC_USE_INTRISTICS
+#ifdef __SSE4_2__
 #include <immintrin.h>
 #include <smmintrin.h>
-#endif // SMALLVEC_USE_INTRISTICS
+#endif // __SSE4_2__
 
 #include <iostream>
 
 class vec3 {
 private:
 
-#ifdef SMALLVEC_USE_INTRISTICS
+#ifdef __SSE4_2__
   __m128 d;
   inline vec3(const __m128 & n);
-#endif // SMALLVEC_USE_INTRISTICS
+#endif // __SSE4_2__
 
-#ifndef SMALLVEC_USE_INTRISTICS
+#ifndef __SSE4_2__
   float d[4];
-#endif // SMALLVEC_USE_INTRISTICS
+#endif // __SSE4_2__
 
 public:
   inline vec3();
@@ -56,7 +54,7 @@ public:
 };
 
 
-#ifndef SMALLVEC_USE_INTRISTICS
+#ifndef __SSE4_2__
 #include <math.h>
 
 using namespace std;
@@ -202,10 +200,10 @@ float inline horizontal_max(const vec3 & a) {
   return std::max(a.x(), std::max(a.y(), a.z()));
 }
 
-#endif // SMALLVEC_USE_INTRISTICS
+#endif // __SSE4_2__
 
 
-#ifdef SMALLVEC_USE_INTRISTICS
+#ifdef __SSE4_2__
 
 inline vec3::vec3() {
   d = _mm_set_ps(0,0,0,0);
@@ -332,5 +330,5 @@ float inline horizontal_max(const vec3 & a) {
 }
 
 
-#endif // SMALLVEC_USE_INTRISTICS
+#endif // __SSE4_2__
 #endif /* SMALLVEC_H */
